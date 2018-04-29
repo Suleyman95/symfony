@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for article in articles %}
+        <span>{{ article.name }} </span> <a href="/edit/{{ article.id }}">&#x270e;</a>
+        <a href="/delete/{{ article.id }}">&#x2718;</a>
+        <br>
+    {% endfor %}
+{% endblock %}
