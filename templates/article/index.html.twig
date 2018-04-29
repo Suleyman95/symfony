@@ -2,8 +2,9 @@
 
 {% block body %}
     {% for article in articles %}
-        <span>{{ article.name }} </span> <a href="/edit/{{ article.id }}">&#x270e;</a>
-        <a href="/delete/{{ article.id }}">&#x2718;</a>
+        <span>{{ article.name }} </span>
+        <a href="{{ path('article_edit', {'id': article.id}) }}">&#x270e;</a>
+        <a href="{{ path('delete_article', {'id': article.id}) }}">&#x2718;</a>
         <br>
     {% endfor %}
 {% endblock %}

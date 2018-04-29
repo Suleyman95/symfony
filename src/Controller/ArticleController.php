@@ -6,9 +6,7 @@ use App\Form\ArticleType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use App\Entity\Article;
 
 class ArticleController extends Controller
@@ -19,19 +17,7 @@ class ArticleController extends Controller
     public function indexAction()
     {
         $entityManager = $this->getDoctrine()->getManager();
-
         $articles = $entityManager->getRepository(Article::class)->findAll();
-
-
-
-        /*$article = new Article();
-        $article->setName('doctrine');
-        $article->setDescription('some text');
-        $article->setCreatedAt(new \DateTime());
-
-        $entityManager->persist($article);
-
-        $entityManager->flush();*/
 
         return $this->render(
             'article/index.html.twig', array(
@@ -46,7 +32,6 @@ class ArticleController extends Controller
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        //$articles = $entityManager->getRepository(Article::class)->findAll();
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -67,18 +52,14 @@ class ArticleController extends Controller
     /**
      * @Route("/edit/{id}", name="article_edit")
      */
-    public function editAction(Request $request)
+    public function editAction(Request $request, $id)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $id = $request->get('id');
         $article = $entityManager->getRepository(Article::class)->find($id);
 
-        if (!$article) {
-            return $this->render(
-                'article/edit.html.twig', array(
-                    'empty' => 'article is empty'
-                ));
+        if (null == $article) {
+            return $this->redirectToRoute('article_index');
         }
 
         $editForm = $this->createForm(ArticleType::class, $article);
@@ -88,13 +69,12 @@ class ArticleController extends Controller
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->redirectToRoute('article_index', array('id' => $id));
+            return $this->redirectToRoute('article_index');
         }
 
         return $this->render('article/edit.html.twig', array(
             'edit_form' => $editForm->createView()
         ));
-
     }
 
     /**
