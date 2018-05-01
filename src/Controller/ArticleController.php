@@ -85,6 +85,10 @@ class ArticleController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
 
         $article = $entityManager->getRepository(Article::class)->find($id);
+        if (null == $article) {
+            return $this->redirectToRoute('article_index');
+        }
+
         $entityManager->remove($article);
         $entityManager->flush();
 
