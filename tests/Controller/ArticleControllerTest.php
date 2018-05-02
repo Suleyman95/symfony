@@ -62,7 +62,7 @@ class ArticleControllerTest extends WebTestCase
         $form['article[createdAt][time][hour]']->select(23);
         $form['article[createdAt][time][minute]']->select(59);
 
-        // submit the form for
+        // submit the form
         $client->submit($form);
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
