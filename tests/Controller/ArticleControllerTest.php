@@ -36,14 +36,38 @@ class ArticleControllerTest extends WebTestCase
         $form['article[createdAt][date][year]']->select(2018);
         $form['article[createdAt][date][month]']->select(5);
         $form['article[createdAt][date][day]']->select(23);
-
-
+        $form['article[createdAt][time][hour]']->select(23);
+        $form['article[createdAt][time][minute]']->select(59);
 
         // submit the form
-        $crawler = $client->submit($form);
+        $client->submit($form);
 
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
+
+    public function testEdit()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/edit/7');
+
+        $form = $crawler->selectButton('article[save]')->form();
+
+        // set some values
+        $form['article[name]'] = 'Lucasandro';
+        $form['article[description]'] = 'Hey there!';
+        $form['article[createdAt][date][year]']->select(2018);
+        $form['article[createdAt][date][month]']->select(5);
+        $form['article[createdAt][date][day]']->select(23);
+        $form['article[createdAt][time][hour]']->select(23);
+        $form['article[createdAt][time][minute]']->select(59);
+
+        // submit the form
+        $client->submit($form);
+
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
 
     public function testDelete()
     {
