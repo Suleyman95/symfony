@@ -34,10 +34,12 @@ class CreateUserCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $html = file_get_contents("https://api.symfony.com/4.0/");
+        $url = "https://api.symfony.com/4.0/";
+        $html = file_get_contents($url);
         $crawler = new Crawler($html);
 
-        $crawler = $crawler->filter('.namespace-container > ul > li');
+        $crawler = $crawler->filter('.namespace-container > ul > li > a');
+
 
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
@@ -45,6 +47,8 @@ class CreateUserCommand extends ContainerAwareCommand
             $namespace = new NamespaceSymfony();
 
             $namespace->setName($element->textContent);
+            $namespace->setUrl($url . $element->getAttribute('href'));
+            //var_dump($namespace);
 
             $em->persist($namespace);
         }
