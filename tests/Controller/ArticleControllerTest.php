@@ -19,7 +19,7 @@ class ArticleControllerTest extends WebTestCase
 
         $client->request('GET', '/');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $this->getResponse()->getContent());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
     }
 
     public function testCreate()
@@ -42,7 +42,7 @@ class ArticleControllerTest extends WebTestCase
         // submit the form
         $client->submit($form);
 
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), $this->getResponse()->getContent());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
     }
 
     public function testEdit()
@@ -65,7 +65,7 @@ class ArticleControllerTest extends WebTestCase
         // submit the form
         $client->submit($form);
 
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), $this->getResponse()->getContent());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
     }
 
 
@@ -75,6 +75,6 @@ class ArticleControllerTest extends WebTestCase
 
         $client->request('GET', '/delete/6');
 
-        $this->assertEquals(302, $client->getResponse()->getStatusCode(), $this->getResponse()->getContent());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
     }
 }
