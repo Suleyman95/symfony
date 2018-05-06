@@ -49,7 +49,7 @@ class ArticleControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/edit/7');
+        $crawler = $client->request('GET', '/edit/14');
 
         $form = $crawler->selectButton('article[save]')->form();
 
