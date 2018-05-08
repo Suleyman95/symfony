@@ -8,6 +8,8 @@
 
 namespace App\Command;
 
+use App\Entity\ClassSymfony;
+use App\Entity\InterfaceSymfony;
 use App\Entity\NamespaceSymfony;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
@@ -34,23 +36,46 @@ class CreateUserCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+
         $url = "https://api.symfony.com/4.0/";
         $html = file_get_contents($url);
         $crawler = new Crawler($html);
 
         $crawler = $crawler->filter('.namespace-container > ul > li > a');
 
-
-        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
-
         foreach ($crawler as $element) {
-            $namespace = new NamespaceSymfony();
 
+            $namespace = new NamespaceSymfony();
+            //$namespace->setParent(null);
             $namespace->setName($element->textContent);
-            $namespace->setUrl($url . $element->getAttribute('href'));
-            //var_dump($namespace);
+            $namespace_url = $namespace->setUrl($url . $element->getAttribute('href'));
 
             $em->persist($namespace);
+
+            $crawlerClass = new Crawler(file_get_contents($namespace_url->getUrl()));
+
+            $classlinks = $crawlerClass->filter('.container-fluid.underlined > .row > .col-md-6 > a');
+
+            foreach ($classlinks as $classes) {
+                $class = new ClassSymfony();
+                $urls = ($url . str_replace('../', '', $classes->getAttribute('href')));
+                $class->setName($classes->textContent);
+                $class->setUrl($urls);
+
+                $em->persist($class);
+            }
+
+            $interfacelinks = $crawlerClass->filter('.container-fluid.underlined > .row > .col-md-6 > em > a');
+
+            foreach ($interfacelinks as $interfaces) {
+                $interface = new InterfaceSymfony();
+                $urls = ($url . str_replace('../', '', $interfaces->getAttribute('href')));
+                $interface->setName($interfaces->textContent);
+                $interface->setUrl($urls);
+
+                $em->persist($interface);
+            }
         }
 
         $em->flush();
