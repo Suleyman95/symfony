@@ -53,7 +53,8 @@ class CreateUserCommand extends ContainerAwareCommand
 
             $em->persist($namespace);
 
-            $crawlerClass = new Crawler(file_get_contents($namespace_url->getUrl()));
+            $namespaceHtml = file_get_contents($namespace_url->getUrl());
+            $crawlerClass = new Crawler($namespaceHtml);
 
             $classlinks = $crawlerClass->filter('.container-fluid.underlined > .row > .col-md-6 > a');
 
@@ -62,6 +63,7 @@ class CreateUserCommand extends ContainerAwareCommand
                 $urls = ($url . str_replace('../', '', $classes->getAttribute('href')));
                 $class->setName($classes->textContent);
                 $class->setUrl($urls);
+                $class->setNamespace($namespace);
 
                 $em->persist($class);
             }
@@ -73,6 +75,7 @@ class CreateUserCommand extends ContainerAwareCommand
                 $urls = ($url . str_replace('../', '', $interfaces->getAttribute('href')));
                 $interface->setName($interfaces->textContent);
                 $interface->setUrl($urls);
+                $interface->setNamespace($namespace);
 
                 $em->persist($interface);
             }
