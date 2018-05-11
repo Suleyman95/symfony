@@ -36,7 +36,7 @@ class CreateUserCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+        /*$em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
         $url = "https://api.symfony.com/4.0/";
         $html = file_get_contents($url);
@@ -46,8 +46,8 @@ class CreateUserCommand extends ContainerAwareCommand
 
         foreach ($crawler as $element) {
 
+            var_dump($element->textContent);
             $namespace = new NamespaceSymfony();
-            //$namespace->setParent(null);
             $namespace->setName($element->textContent);
             $namespace_url = $namespace->setUrl($url . $element->getAttribute('href'));
 
@@ -81,6 +81,83 @@ class CreateUserCommand extends ContainerAwareCommand
             }
         }
 
-        $em->flush();
+        $em->flush();*/
+
+        /****************************************************************************************/
+
+        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+
+        $namespace = new NamespaceSymfony();
+        $namespace->setName('Symfony');
+        $namespace->setUrl('http://api.symfony.com/4.0/Symfony.html');
+        $namespace->setParent(null);
+
+        $em->persist($namespace);
+
+        $this->recursion('http://api.symfony.com/4.0/Symfony.html', $namespace);
+    }
+
+    public function recursion(string $url, ?NamespaceSymfony $parent)
+    {
+        $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
+
+        $html = file_get_contents($url);
+        $crawler = new Crawler($html);
+        $crawler = $crawler->filter('.namespace_list > a');
+        $baseUrl = 'http://api.symfony.com/4.0/';
+
+        foreach ($crawler as $namespaces) {
+
+            $url = ($baseUrl . str_replace('../', '', $namespaces->getAttribute('href')));
+
+            var_dump('NAMESPASE');
+            var_dump($namespaces->textContent);
+            var_dump($url);
+            $namespace = new NamespaceSymfony();
+            $namespace->setName($namespaces->textContent);
+            $namespace->setUrl($url);
+            $namespace->setParent($parent);
+
+            $em->persist($namespace);
+
+            $html = file_get_contents($url);
+            $crawler = new Crawler($html);
+            $crawlerClass = $crawler->filter('.container-fluid.underlined > .row > .col-md-6 > a');
+
+            foreach ($crawlerClass as $classes) {
+
+                $urlClass = ($baseUrl . str_repeat('../', '', $classes->getAttribute('href')));
+
+                var_dump('CLASS');
+                var_dump($classes->textContent);
+                var_dump($urlClass);
+                $class = new ClassSymfony();
+                $class->setName($classes->textContent);
+                $class->setUrl($urlClass);
+                $class->setNamespace($namespace);
+
+                $em->persist($class);
+            }
+
+            $crawlerInterface = $crawler->filter('.container-fluid.underlined > .row > .col-md-6 > em > a');
+
+            foreach ($crawlerInterface as $interfaces) {
+
+                $urlInterface = ($baseUrl . str_repeat('../', '', $interfaces->getAttribute('href')));
+
+                var_dump('INTERFACE');
+                var_dump($interfaces->textContent);
+                var_dump($urlInterface);
+                $interface = new InterfaceSymfony();
+                $interface->setName($interfaces->textContent);
+                $interface->setUrl($urlInterface);
+                $interface->setNamespace($namespace);
+
+                $em->persist($interface);
+            }
+
+            $this->recursion($url, $namespace);
+            //$em-flush();
+        }
     }
 }
