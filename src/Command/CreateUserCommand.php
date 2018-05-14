@@ -97,18 +97,18 @@ class CreateUserCommand extends ContainerAwareCommand
         $this->recursion('http://api.symfony.com/4.0/Symfony.html', $namespace);
     }
 
-    public function recursion(string $url, ?NamespaceSymfony $parent)
+    public function recursion(string $url, NamespaceSymfony $parent)
     {
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
         $html = file_get_contents($url);
         $crawler = new Crawler($html);
-        $crawler = $crawler->filter('.namespace_list > a');
+        $crawler = $crawler->filter('.namespace-list > a');
         $baseUrl = 'http://api.symfony.com/4.0/';
 
         foreach ($crawler as $namespaces) {
 
-            $url = ($baseUrl . str_replace('../', '', $namespaces->getAttribute('href')));
+            $url = $baseUrl . str_replace('../', '', $namespaces->getAttribute('href'));
 
             var_dump('NAMESPASE');
             var_dump($namespaces->textContent);
@@ -126,7 +126,7 @@ class CreateUserCommand extends ContainerAwareCommand
 
             foreach ($crawlerClass as $classes) {
 
-                $urlClass = ($baseUrl . str_repeat('../', '', $classes->getAttribute('href')));
+                $urlClass = $baseUrl . str_replace('../', '', $classes->getAttribute('href'));
 
                 var_dump('CLASS');
                 var_dump($classes->textContent);
@@ -143,7 +143,7 @@ class CreateUserCommand extends ContainerAwareCommand
 
             foreach ($crawlerInterface as $interfaces) {
 
-                $urlInterface = ($baseUrl . str_repeat('../', '', $interfaces->getAttribute('href')));
+                $urlInterface = ($baseUrl . str_replace('../', '', $interfaces->getAttribute('href')));
 
                 var_dump('INTERFACE');
                 var_dump($interfaces->textContent);
@@ -157,7 +157,7 @@ class CreateUserCommand extends ContainerAwareCommand
             }
 
             $this->recursion($url, $namespace);
-            //$em-flush();
+            $em->flush();
         }
     }
 }
