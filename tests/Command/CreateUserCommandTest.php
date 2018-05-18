@@ -1,5 +1,5 @@
 <?php
-/*
+
 namespace App\Tests\Command;
 
 use App\Command\CreateUserCommand;
@@ -24,4 +24,4 @@ class CreateUserCommandTest extends KernelTestCase
             'command' => $command->getName(),
         ));
     }
-}*/
+}
