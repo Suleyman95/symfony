@@ -110,9 +110,9 @@ class CreateUserCommand extends ContainerAwareCommand
 
             $url = $baseUrl . str_replace('../', '', $namespaces->getAttribute('href'));
 
-            var_dump('NAMESPASE');
+            /*var_dump('NAMESPASE');
             var_dump($namespaces->textContent);
-            var_dump($url);
+            var_dump($url);*/
             $namespace = new NamespaceSymfony();
             $namespace->setName($namespaces->textContent);
             $namespace->setUrl($url);
@@ -128,9 +128,9 @@ class CreateUserCommand extends ContainerAwareCommand
 
                 $urlClass = $baseUrl . str_replace('../', '', $classes->getAttribute('href'));
 
-                var_dump('CLASS');
+                /*var_dump('CLASS');
                 var_dump($classes->textContent);
-                var_dump($urlClass);
+                var_dump($urlClass);*/
                 $class = new ClassSymfony();
                 $class->setName($classes->textContent);
                 $class->setUrl($urlClass);
@@ -145,9 +145,9 @@ class CreateUserCommand extends ContainerAwareCommand
 
                 $urlInterface = ($baseUrl . str_replace('../', '', $interfaces->getAttribute('href')));
 
-                var_dump('INTERFACE');
+                /*var_dump('INTERFACE');
                 var_dump($interfaces->textContent);
-                var_dump($urlInterface);
+                var_dump($urlInterface);*/
                 $interface = new InterfaceSymfony();
                 $interface->setName($interfaces->textContent);
                 $interface->setUrl($urlInterface);
