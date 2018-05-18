@@ -1,11 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: msv
- * Date: 14.05.18
- * Time: 13:37
- */
-
+/*
 namespace App\Tests\Command;
 
 use App\Command\CreateUserCommand;
@@ -30,4 +24,4 @@ class CreateUserCommandTest extends KernelTestCase
             'command' => $command->getName(),
         ));
     }
-}
+}*/
