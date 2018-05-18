@@ -17,8 +17,8 @@ class ArticleControllerTest extends WebTestCase
     public function testIndex()
     {
         $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'andreybolonin',
-            'PHP_AUTH_PW'   => 'pass',
+            'PHP_AUTH_USER' => 'Admin',
+            'PHP_AUTH_PW'   => '12345',
         ));
 
         $client->request('GET', '/');
@@ -29,8 +29,8 @@ class ArticleControllerTest extends WebTestCase
     public function testCreate()
     {
         $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'andreybolonin',
-            'PHP_AUTH_PW'   => 'pass',
+            'PHP_AUTH_USER' => 'Admin',
+            'PHP_AUTH_PW'   => '12345',
         ));
 
         $crawler = $client->request('GET', '/create');
@@ -55,8 +55,8 @@ class ArticleControllerTest extends WebTestCase
     public function testEdit()
     {
         $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'andreybolonin',
-            'PHP_AUTH_PW'   => 'pass',
+            'PHP_AUTH_USER' => 'Admin',
+            'PHP_AUTH_PW'   => '12345',
         ));
 
         $crawler = $client->request('GET', '/edit/7');
@@ -82,8 +82,8 @@ class ArticleControllerTest extends WebTestCase
     public function testDelete()
     {
         $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'andreybolonin',
-            'PHP_AUTH_PW'   => 'pass',
+            'PHP_AUTH_USER' => 'Admin',
+            'PHP_AUTH_PW'   => '12345',
         ));
 
         $client->request('GET', '/delete/6');

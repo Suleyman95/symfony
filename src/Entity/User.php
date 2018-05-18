@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: msv
- * Date: 15.05.18
- * Time: 18:28
- */
+
 
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity()
  * @package App\Entity
  */
-
 class User implements UserInterface
 {
     /**

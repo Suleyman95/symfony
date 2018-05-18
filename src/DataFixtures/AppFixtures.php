@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: msv
- * Date: 16.05.18
- * Time: 22:34
- */
+
 
 namespace App\DataFixtures;
 
@@ -21,7 +16,7 @@ class AppFixtures extends Fixture
         $set_user = new User();
 
         $set_user->setUsername('Admin');
-        $set_user->setPassword('12345');
+        $set_user->setPassword(password_hash('12345', PASSWORD_DEFAULT));
 
         $manager->persist($set_user);
 
