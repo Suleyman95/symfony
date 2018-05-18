@@ -59,7 +59,7 @@ class ArticleControllerTest extends WebTestCase
             'PHP_AUTH_PW'   => '12345',
         ));
 
-        $crawler = $client->request('GET', '/edit/8');
+        $crawler = $client->request('GET', '/edit/1');
 
         $form = $crawler->selectButton('article[save]')->form();
 
