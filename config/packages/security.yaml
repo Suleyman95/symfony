@@ -11,7 +11,10 @@ security:
             security: false
         main:
             pattern: ^/
-            http_basic: ~
+            anonymous: ~
+            #form_login:
+                #login_path: login
+                #check_path: login_check
             provider: db_provider
 
             # activate different ways to authenticate
@@ -28,5 +31,6 @@ security:
         App\Entity\User:
             algorithm: bcrypt
     access_control:
-        # - { path: ^/, roles: ROLE_ADMIN }
+        #- { path: ^/, roles: ROLE_ADMIN }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/profile, roles: ROLE_USER }

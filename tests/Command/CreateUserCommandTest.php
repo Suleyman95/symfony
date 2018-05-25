@@ -23,5 +23,8 @@ class CreateUserCommandTest extends KernelTestCase
         $commandTester->execute(array(
             'command' => $command->getName(),
         ));
+
+        $output = $commandTester->getDisplay();
+        $this->assertContains('Symfony\Bundle', $output);
     }
 }

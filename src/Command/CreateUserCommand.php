@@ -14,11 +14,15 @@ use App\Entity\NamespaceSymfony;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CreateUserCommand extends ContainerAwareCommand
 {
+    private $iter = 0;
+    private $node;
+    private $output;
     protected function configure()
     {
         $this
@@ -31,6 +35,13 @@ class CreateUserCommand extends ContainerAwareCommand
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command allows you to create a user...')
+            ->addOption(
+                'node',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'How many times should the message be printed?',
+                2
+            );
         ;
     }
 
@@ -85,6 +96,9 @@ class CreateUserCommand extends ContainerAwareCommand
 
         /****************************************************************************************/
 
+        $this->output = $output;
+        $this->node = $input->getOption('node');
+
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
         $namespace = new NamespaceSymfony();
@@ -99,6 +113,10 @@ class CreateUserCommand extends ContainerAwareCommand
 
     public function recursion(string $url, NamespaceSymfony $parent)
     {
+        $this->iter++;
+        if ($this->iter >= $this->node) {
+            return;
+        }
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
 
         $html = file_get_contents($url);
@@ -113,6 +131,8 @@ class CreateUserCommand extends ContainerAwareCommand
             /*var_dump('NAMESPASE');
             var_dump($namespaces->textContent);
             var_dump($url);*/
+            /*echo $namespaces->textContent . "\n";*/
+            $this->output->writeln($namespaces->textContent);
             $namespace = new NamespaceSymfony();
             $namespace->setName($namespaces->textContent);
             $namespace->setUrl($url);
@@ -158,10 +178,6 @@ class CreateUserCommand extends ContainerAwareCommand
 
             $this->recursion($url, $namespace);
             //$em->flush();
-        }
-
-        if ($url == 'http://api.symfony.com/4.0/Symfony/Bridge/Doctrine/DependencyInjection/CompilerPass.html') {
-            return 'STOPCAR';
         }
     }
 }

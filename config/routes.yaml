@@ -7,6 +7,9 @@ app_lucky_number:
   path: /lucky/number
   controller: App\Controller\LuckyController::number
 
+#login_check:
+  #path: /login_check
+
 #app_article:
  # path: /article
  # controller: App\Controller\ArticleController::index

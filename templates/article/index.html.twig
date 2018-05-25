@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <a href="{{ path('article_create') }}">create</a><br>
     {% for article in articles %}
         <span>{{ article.name }} </span>
         <a href="{{ path('article_edit', {'id': article.id}) }}">&#x270e;</a>
