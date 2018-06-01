@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use Gedmo\IpTraceable\Traits\IpTraceableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
 * @ORM\Entity
 */
 class Article
 {
+    //use TimestampableEntity;
     /**
     * @ORM\Id
     * @ORM\GeneratedValue
@@ -25,6 +29,49 @@ class Article
     * @ORM\Column(type="string")
     */
     private $description;
+
+    /**
+     *
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $createdFromIp;
+
+    /**
+     * @ORM\Column(type="string", length=45, nullable=true)
+     */
+    private $updatedFromIp;
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedFromIp()
+    {
+        return $this->createdFromIp;
+    }
+
+    /**
+     * @param mixed $createdFromIp
+     */
+    public function setCreatedFromIp($createdFromIp)
+    {
+        $this->createdFromIp = $createdFromIp;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedFromIp()
+    {
+        return $this->updatedFromIp;
+    }
+
+    /**
+     * @param mixed $updatedFromIp
+     */
+    public function setUpdatedFromIp($updatedFromIp)
+    {
+        $this->updatedFromIp = $updatedFromIp;
+    }
 
     /**
      * @ORM\Column(type="datetime")
