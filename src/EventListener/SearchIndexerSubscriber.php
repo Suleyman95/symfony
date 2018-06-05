@@ -10,6 +10,14 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
 class SearchIndexerSubscriber implements EventSubscriber
 {
+
+    private $mailer;
+
+    public function __construct(\Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     public function getSubscribedEvents()
     {
         return array(
@@ -35,9 +43,13 @@ class SearchIndexerSubscriber implements EventSubscriber
         // perhaps you only want to act on some "Product" entity
         if ($entity instanceof Article) {
             $entityManager = $args->getEntityManager();
-            var_dump(777);
-            exit;
-            // ... do something with the Product
+            //var_dump(777);
+            $message = (new \Swift_Message('site update'))
+                ->setFrom('youmsv@gmail.com')
+                ->setTo('d_yates@mail.ru')
+                ->setBody('texttexttexttext');
+
+            $this->mailer->send($message);
         }
     }
 }
