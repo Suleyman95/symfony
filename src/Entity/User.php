@@ -2,12 +2,15 @@
 
 
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class User
- * @ORM\Entity()
+ * @ORM\Entity
+ * @UniqueEntity(fields="email", message="Email already taken")
  * @package App\Entity
  */
 class User implements UserInterface
@@ -20,76 +23,122 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=200, unique=true)
+     * @Assert\NotBlank()
      */
     private $username;
+
     /**
-     * @var string
-     *
-     * @ORM\Column(type="text")
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    /**
+     * @ORM\Column(type="string", length=64)
      */
     private $password;
+
     /**
-     * @return int
+     * @ORM\Column(type="array")
      */
-    public function getId(): int
+    private $roles;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->roles = array('ROLE_USER');
     }
+
+
     /**
-     * @param int $id
+     * @return mixed
      */
-    public function setId(int $id)
+    public function getEmail()
     {
-        $this->id = $id;
+        return $this->email;
     }
+
     /**
-     * @return string
+     * @param mixed $email
      */
-    public function getUsername(): string
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
     {
         return $this->username;
     }
+
     /**
-     * @param string $username
+     * @param mixed $username
      */
-    public function setUsername(string $username)
+    public function setUsername($username)
     {
         $this->username = $username;
     }
+
     /**
-     * @return string
+     * @return mixed
      */
-    public function getPassword(): string
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
     {
         return $this->password;
     }
+
     /**
-     * @param string $password
+     * @param mixed $password
      */
-    public function setPassword(string $password)
+    public function setPassword($password)
     {
         $this->password = $password;
     }
-    /**
-     * @return null
-     */
+
     public function getSalt()
     {
         return null;
     }
+
     /**
-     * @return array
+     * @return mixed
      */
     public function getRoles()
     {
-        return array('ROLE_ADMIN');
+        return $this->roles;
     }
+
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
     }
+
 }

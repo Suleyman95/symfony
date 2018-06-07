@@ -49,7 +49,7 @@ class SearchIndexerSubscriber implements EventSubscriber
                 ->setTo('d_yates@mail.ru')
                 ->setBody('texttexttexttext');
 
-            $this->mailer->send($message);
+            //$this->mailer->send($message);
         }
     }
 }
