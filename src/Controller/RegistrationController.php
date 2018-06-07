@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Form\UserType;
@@ -37,7 +36,7 @@ class RegistrationController extends Controller
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
-            return $this->redirectToRoute('/');
+            return $this->redirectToRoute('user_registration');
         }
 
         return $this->render(
