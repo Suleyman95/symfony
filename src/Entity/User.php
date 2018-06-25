@@ -14,6 +14,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+
+    const ROLE_USER = 'ROLE_USER';
+
     /**
      * @var int
      *
@@ -48,15 +51,20 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="array")
-     */
-    private $roles;
-
-    public function __construct()
+    * @return string
+    */
+    public function getRole()
     {
-        $this->roles = array('ROLE_USER');
+        return self::ROLE_USER;
     }
 
+    /**
+    * @return array
+    */
+    public function getRoles()
+    {
+        return [self::ROLE_USER];
+    }
 
     /**
      * @return mixed
@@ -125,14 +133,6 @@ class User implements UserInterface
     public function getSalt()
     {
         return null;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRoles()
-    {
-        return $this->roles;
     }
 
     public function eraseCredentials()
